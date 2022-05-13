@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"protobuf-example-go/src/complex"
+	"protobuf-example-go/src/enum_example"
 	"protobuf-example-go/src/simple"
 
 	"google.golang.org/protobuf/encoding/protojson"
@@ -18,6 +20,57 @@ func main() {
 
 	// For JSON example
 	jsonDemo(sm)
+
+	// For enum
+	doEnum()
+
+	// For complex
+	doComplex()
+
+}
+
+func doComplex() {
+	dm := complex.DummyMessage{
+		Id:   1,
+		Name: "Dummy 1",
+	}
+
+	cm := complex.ComplexMessage{
+		OneDummy: &complex.DummyMessage{
+			Id:   2,
+			Name: "First Dummy",
+		},
+		MultipleDummy: []*complex.DummyMessage{
+			{
+				Id:   3,
+				Name: "Second Dummy",
+			},
+			{
+				Id:   4,
+				Name: "Third Dummy",
+			},
+		},
+	}
+
+	fmt.Println("\nPrinting Complex Messages:")
+	fmt.Println("\nDummy message:", &dm)
+	fmt.Println("\nComplex message:", &cm)
+}
+
+func doEnum() {
+	em := enum_example.EnumMessage{
+		Id:           123,
+		DayOfTheWeek: enum_example.DayOfTheWeek_FRIDAY,
+	}
+
+	fmt.Println("\nPrinting enum examples:")
+	fmt.Println(&em)
+
+	// Change if need be:
+	em.DayOfTheWeek = enum_example.DayOfTheWeek_MONDAY
+
+	fmt.Println(&em)
+
 }
 
 func jsonDemo(sm proto.Message) {
