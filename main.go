@@ -6,12 +6,46 @@ import (
 	"log"
 	"protobuf-example-go/src/simple"
 
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
 func main() {
 	sm := doSimple()
+
+	// For read and write files demo
 	readAndWriteDemo(sm)
+
+	// For JSON example
+	jsonDemo(sm)
+}
+
+func jsonDemo(sm proto.Message) {
+	smAsString := toJSON(sm)
+	fmt.Println("JSON message:", smAsString)
+
+	sm2 := &simple.SimpleMessage{}
+	fromJSON(smAsString, sm2)
+	fmt.Println("Unmarashaled message:", sm2)
+}
+
+// Marshal protobuf message to JSON format
+func toJSON(pb proto.Message) string {
+	out, err := protojson.Marshal(pb)
+	if err != nil {
+		log.Fatalln("Can't convert to JSON", err)
+		return ""
+	}
+	return string(out)
+}
+
+func fromJSON(in string, pb proto.Message) error {
+	err := protojson.Unmarshal([]byte(in), pb)
+	if err != nil {
+		log.Fatalln("Error unmarshlling json", err)
+		return err
+	}
+	return nil
 }
 
 func readAndWriteDemo(sm proto.Message) {
