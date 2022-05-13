@@ -24,9 +24,19 @@ func jsonDemo(sm proto.Message) {
 	smAsString := toJSON(sm)
 	fmt.Println("JSON message:", smAsString)
 
+	testJSONmsg := `{ 
+		"id":54321, 
+		"isSimple":false, 
+		"name":"Test message!", 
+		"sampleList":[54, 2, 32, 11]
+	}`
+
 	sm2 := &simple.SimpleMessage{}
+	sm3 := &simple.SimpleMessage{}
 	fromJSON(smAsString, sm2)
-	fmt.Println("Unmarashaled message:", sm2)
+	fromJSON(testJSONmsg, sm3)
+	fmt.Println("Unmarashaled message 1:", sm2)
+	fmt.Println("Unmarashaled message 2:", sm3)
 }
 
 // Marshal protobuf message to JSON format
